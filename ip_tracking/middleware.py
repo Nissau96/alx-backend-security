@@ -1,4 +1,6 @@
-from .models import RequestLog
+# ip_tracking/middleware.py
+from django.http import HttpResponseForbidden
+from .models import RequestLog, BlockedIP
 from ipware import get_client_ip
 
 
@@ -19,6 +21,10 @@ class IPLoggingMiddleware:
 
         # We only log requests if we successfully found an IP address.
         if client_ip:
+
+            if BlockedIP.objects.filter(ip_address=client_ip).exists():
+                return HttpResponseForbidden("<h1>Forbidden</h1><p>Your IP address has been blocked.</p>")
+
             RequestLog.objects.create(
                 ip_address=client_ip,
                 path=request.path
