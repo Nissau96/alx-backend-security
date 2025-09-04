@@ -18,7 +18,7 @@ This repository demonstrates how to build these features from the ground up, foc
 |   ✅    | **IP Blacklisting** | Block requests from known malicious IP addresses via middleware.                           |
 | ✅ | **Geolocation** | Map IP addresses to geographic locations (country, city) with caching. |
 | ✅ | **Rate Limiting** | Prevent abuse with dynamic IP-based request limits on sensitive views. |
-|   | **Anomaly Detection** | Identify suspicious traffic patterns using statistical methods.             |
+| ✅ | **Anomaly Detection** | Hourly task to flag IPs with suspicious activity (e.g., high request volume). |
 |   | **Privacy & Compliance** | Tools for IP anonymization and data retention policies (GDPR/CCPA).         |
 
 
