@@ -5,6 +5,8 @@ class RequestLog(models.Model):
     ip_address = models.CharField(max_length=45)
     timestamp = models.DateTimeField(auto_now_add=True)
     path = models.CharField(max_length=2000)
+    country = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
 
     class Meta:
         indexes = [models.Index(fields=['timestamp'])]
