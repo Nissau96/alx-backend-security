@@ -1,6 +1,6 @@
 # ip_tracking/views.py
 from django.http import HttpResponse
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 
 @ratelimit(
