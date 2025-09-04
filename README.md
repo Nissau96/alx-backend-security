@@ -16,8 +16,8 @@ This repository demonstrates how to build these features from the ground up, foc
 | :----: | ---------------------- | --------------------------------------------------------------------------- |
 |   ✅    | **IP Logging** | Middleware to log the IP, timestamp, and path of every request.             |
 |   ✅    | **IP Blacklisting** | Block requests from known malicious IP addresses via middleware.                           |
-|   🔲    | **Geolocation** | Map IP addresses to geographic locations (country, city, etc.).             |
-|   | **Rate Limiting** | Prevent brute-force attacks and service abuse.                              |
+| ✅ | **Geolocation** | Map IP addresses to geographic locations (country, city) with caching. |
+| ✅ | **Rate Limiting** | Prevent abuse with dynamic IP-based request limits on sensitive views. |
 |   | **Anomaly Detection** | Identify suspicious traffic patterns using statistical methods.             |
 |   | **Privacy & Compliance** | Tools for IP anonymization and data retention policies (GDPR/CCPA).         |
 
@@ -90,3 +90,21 @@ This repository demonstrates how to build these features from the ground up, foc
     - A `BlockedIP` model was added to `ip_tracking/models.py` to store banned IPs.
     - The `IPLoggingMiddleware` was updated to check the incoming request's IP against the `BlockedIP` table. If the IP is found, it returns an `HttpResponseForbidden` (403).
     - A custom management command, `block_ip`, was created. It allows adding an IP to the blacklist from the terminal (e.g., `python manage.py block_ip 123.45.67.89 --reason "Spam activity"`).
+
+### Task 2: IP Geolocation Analytics
+- **Objective**: Enhance request logs with geographic data (country and city).
+- **Implementation**:
+    - The `django-ipgeolocation` library was installed to provide geolocation services.
+    - The `RequestLog` model was extended with nullable `country` and `city` fields.
+    - The middleware now performs a geolocation lookup for each request's IP.
+    - To optimize performance, results are cached for 24 hours using Django's built-in caching framework. An API call is only made if the IP address is not found in the cache.
+
+### Task 3: Rate Limiting by IP
+- **Objective**: Implement rate limiting to prevent brute-force attacks and service abuse.
+- **Implementation**:
+    - The `django-ratelimit` library was installed and its middleware was added to `settings.py`.
+    - A sample `sensitive_login_view` was created to demonstrate the feature.
+    - The `@ratelimit` decorator was applied to the view's `POST` method and uses a dynamic rate based on authentication status:
+        - **Anonymous Users**: Limited to 5 requests per minute per IP.
+        - **Authenticated Users**: Limited to 10 requests per minute per IP.
+    - If the limit is exceeded, the view automatically returns a `429 Too Many Requests` response.
