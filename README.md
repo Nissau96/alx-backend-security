@@ -15,7 +15,7 @@ This repository demonstrates how to build these features from the ground up, foc
 | Status | Feature                | Description                                                                 |
 | :----: | ---------------------- | --------------------------------------------------------------------------- |
 |   ✅    | **IP Logging** | Middleware to log the IP, timestamp, and path of every request.             |
-|   🔲    | **IP Blacklisting** | Block requests from known malicious IP addresses.                           |
+|   ✅    | **IP Blacklisting** | Block requests from known malicious IP addresses via middleware.                           |
 |   🔲    | **Geolocation** | Map IP addresses to geographic locations (country, city, etc.).             |
 |   | **Rate Limiting** | Prevent brute-force attacks and service abuse.                              |
 |   | **Anomaly Detection** | Identify suspicious traffic patterns using statistical methods.             |
@@ -83,3 +83,10 @@ This repository demonstrates how to build these features from the ground up, foc
     -   A `RequestLog` model was created in `ip_tracking/models.py` to store request data.
     -   `IPLoggingMiddleware` was implemented in `ip_tracking/middleware.py` to intercept requests, get the client IP using `django-ipware`, and save a `RequestLog` instance to the database.
     -   The middleware and app were registered in `settings.py` to activate the system.
+
+### Task 1: IP Blacklisting
+- **Objective**: Block requests from a predefined list of IP addresses.
+- **Implementation**:
+    - A `BlockedIP` model was added to `ip_tracking/models.py` to store banned IPs.
+    - The `IPLoggingMiddleware` was updated to check the incoming request's IP against the `BlockedIP` table. If the IP is found, it returns an `HttpResponseForbidden` (403).
+    - A custom management command, `block_ip`, was created. It allows adding an IP to the blacklist from the terminal (e.g., `python manage.py block_ip 123.45.67.89 --reason "Spam activity"`).
