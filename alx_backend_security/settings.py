@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'ip_tracking.middleware.IPLoggingMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'ratelimit.middleware.RatelimitMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -137,3 +138,5 @@ IP_GEOLOCATION_SETTINGS = {
     'ENABLE_RESPONSE_HOOK': False,  # No need for response header
     'ENABLE_COOKIE': False,  # Avoid cookies for privacy
 }
+
+RATELIMIT_ENABLE = True
